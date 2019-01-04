@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+{% if user.is_authenticated %}
+  {% include "logged-nav.html" %}
+{% else %}
+  {% include "general-nav.html" %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+        <div class="row">
+            <div class="col-md-8">
+              <div class="row">
+                  <h1>{{news.title}}</h1>
+                  <div class="col-md-12 p-1">
+                      Views : {{news.views}}
+                      <!--<button type="button" class="btn btn-outline-secondary btn-sm">
+                          <i class="fas fa-thumbs-up"></i> Like
+                      </button>-->
+                  </div>
+                  {% if news.image.img %}
+                    <img class="img-fluid mx-auto p-2 content-image" src="/media/{{news.image.img}}"">
+                  {% else %}
+                    <img class="img-fluid" src="https://via.placeholder.com/900x400">
+                  {% endif %}
+                  
+                  <br>
+                  <br>
+                  <p class="p-2">
+                    {{news.content}}
+                  </p>
+              </div>
+              <div>
+                <h1>Comments:</h1>
+                {% if user.is_authenticated %}    
+                <div class="form-group">
+                  <form action="/pages/comment" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input class="btn text-white btn-danger m-2" type="submit" value="Submit">
+                  </form>                  
+                </div>
+                {% endif %}
+                {% for item in comments %}
+                <div class="card card-inner m-2">
+                  <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                          <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid"/>
+                          <p class="text-secondary text-center">15 Minutes Ago</p>
+                        </div>
+                        <div class="col-md-10">
+                          <p><a href="#"><strong>
+                            {% if item.user.username %}
+                              {{item.user.username}}
+                            {% else %}
+                              Ananomous
+                            {% endif %}
+                          </strong></a></p>
+                          <p>{{item.text}}</p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="col-md-4">
+                <ul class="list-group">
+                    <li class="list-group-item">Trending Articles</li>
+                    {% for item in trend %}
+                    <li class="list-group-item"><a href="{% url 'news-detail' item.id%} ">{{item.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+{% endblock %}

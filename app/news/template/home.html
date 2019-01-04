@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+{% include "general-nav.html" %}
+{% endblock %}
+
+{% block content %}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    {% for item in news %}
+                    <div class="col-md-4">
+                        <div class="card m-1">
+                            <!--<img class="card-img-top" src="https://via.placeholder.com/150" alt="Card image cap">-->
+                            {% if item.image.img %}
+                                <img class="card-img-top thum-image" src="/media/{{item.image.img}}" alt="Card image cap">
+                            {% else %}
+                                <img class="card-img-top thum-image" src="https://via.placeholder.com/150" alt="Card image cap">
+                            {% endif %}
+                            <div class="card-body">
+                            <div style="height:350px">
+                                <h5 class="card-title">{{item.title}}</h5>
+                                <p class="card-text">{{item.content}}</p>
+                            </div>
+                            <a href="{% url 'news-detail' item.id%}" class="btn btn-primary">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <ul class="list-group">
+                    <li class="list-group-item">Trending Articles</li>
+                    {% for item in trend %}
+                    <li class="list-group-item"><a href="{% url 'news-detail' item.id%} ">{{item.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+{% endblock %}
