@@ -1,0 +1,12 @@
+*.pc
+*.pyc
+*.pyo
+
+__pycache__
+build
+dist
+MANIFEST
+
+.DS_Store
+
+app/news/migrations
