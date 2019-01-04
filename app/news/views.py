@@ -32,8 +32,8 @@ def home(request):
         }
         return render(request, 'dashboard.html', context)
     else:
-        categories = CategoryService().getPublic()
-        news = NewsService().getPublic()
+        categories = CategoryService().getAll()
+        news = NewsService().getAll()
         
         context = {
             "categories":categories,
@@ -115,19 +115,19 @@ def newscomment(request):
         return JsonResponse(method_not_supported, safe=False)
 
 def newssearch(request):
+    search_key = request.GET.get('search')
+    news = NewsService().searchByKeyword(search_key)
+    #print(news)
+    categories = getCategory(request)
+    context = {
+        "categories":categories,
+        "news":getPreviewNews(news),
+        "trend":getTrendingNews()
+    }
     if request.user.is_authenticated:
-        search_key = request.GET.get('search')
-        news = NewsService().searchByKeyword(search_key)
-        #print(news)
-        categories = getCategory(request)
-        context = {
-            "categories":categories,
-            "news":getPreviewNews(news),
-            "trend":getTrendingNews()
-        }
         return render(request, 'dashboard.html', context)
     else:
-        return JsonResponse(user_not_supported, safe=False)
+        return render(request, 'home.html', context)
 
 ## helper methods
 def getPreviewNews(news):
