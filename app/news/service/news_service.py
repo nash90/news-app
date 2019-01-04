@@ -6,6 +6,7 @@ from django.db.models import Count
 from django.utils import timezone
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from django.conf import settings
 
 from ..models import Category
 from ..models import News
@@ -61,7 +62,7 @@ class NewsService():
     
     def getRecentMostCommentedNews(self):
         try:
-            check_date = timezone.now() + relativedelta(months=-2)
+            check_date = timezone.now() + relativedelta(months=-settings.RECENT_NEWS_MONTH)
             news = Comment.objects.filter(news__publish_date__gt=check_date).values('news_id', 'news__title', 'news__views').annotate(total=Count('news_id'))
             return news
         except Exception as e: raise Http404("DB Error: cant get the most commented news")  
