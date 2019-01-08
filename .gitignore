@@ -11,3 +11,4 @@ MANIFEST
 
 app/news/migrations
 app/htmlcov
+app/static
